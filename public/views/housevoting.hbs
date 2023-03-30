@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>House Voting</title>
+        <style type="text/css">
+            ul.unbulletted {
+                list-style-type: none; 
+            }
+            .bold {
+                font-weight: bold;
+            }
+            .italic {
+                font-style: italic;
+            }
+            pre {
+                background: #282923;
+                color: #d6d6d6;
+                font-family: monospace;
+                border-style: solid;
+                border-width: 1px;
+            }
+            code.inline {
+                background: #282923;
+                color: #d6d6d6;
+                font-family:  monospace;
+                border-style: solid;
+                border-radius: 4px;
+                border-color: #282923;
+                margin: 1px;
+                display: inline-block;
+        
+            }
+            a.button:link, a.button:visited {
+              background-color: #6C99BB;
+              color: #d6d6d6;
+              padding: 14px 25px;
+              border-radius: 5px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+            }
+        
+            a.button:hover, a.button:active {
+              background-color: #66D9EF;
+            }
+            #results {
+                display: block;
+                grid-template-columns: 60% 40%;
+            }
+            #results span {
+                font-weight: bold;
+            }
+            
+            #live_zone {
+                display:block;
+                width:100%;
+                height:280px;
+                max-width: 500px;
+            }
+            
+        </style>
+    </head>
+    <body>
+        
+        <div id="live_zone">
+            <h2>Houses</h2>
+            <p>
+                <a class="button" href="javascript:void(0);" onclick="getHouseData('Lannister')">Lannister</a>
+                <a class="button" href="javascript:void(0);" onclick="getHouseData('Stark')">Stark</a>
+                <a class="button" href="javascript:void(0);" onclick="getHouseData('Baratheon')">Baratheon</a>
+                <a class="button" href="javascript:void(0);" onclick="getHouseData('Tyrell')">Tyrell</a>
+                <a class="button" href="javascript:void(0);" onclick="getHouseData('Targaryen')">Targaryen</a>
+            </p>
+            <div id="results">
+            </div>
+        </div>
+        <form action="./addPlayer">
+	<label for="id_play">Add Player:</label>
+	<input type="text" id="id_play" name="play" placeholder="Name"><br>
+    <select id="id_house" name="house">
+        <option value="0">Lannister</option>
+        <option value="1">Stark</option>
+        <option value="2">Baratheon</option>
+        <option value="3">Tyrell</option>
+        <option value="4">Targaryen</option>
+    </select>
+
+	<button type="submit" value="Submit">Submit</button>
+</form> 
+<br><br>
+<form action="./addPoints">
+	<select name="play" id="id_play">
+	 {{#each all_players}}
+  <option value="{{this.u_id}}">{{this.player_name}}</option>
+ {{/each}}
+
+</select><br>
+	
+	<label for="id_points">Amount of points to give:</label>
+	<input type="text" id="id_points" name="points" placeholder="Points"><br>
+
+	
+	<button type="submit" value="Submit">Submit</button>
+</form> 
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            function getHouseData(house) {
+                var ajax_params = {
+                    'url'     : `https://user.tjhsst.edu/2023tkalisip/house_voting_worker?house=${house}`,
+                    'type'    : "get",
+                    'success' : onServerResponse    // the name of the callback function to call
+                }
+                $.ajax( ajax_params )
+            }
+    
+            function onServerResponse(responseString){
+                console.log(responseString)
+                document.getElementById('results').innerHTML = responseString;
+            }
+    </script>
+    </body>
+</html>
